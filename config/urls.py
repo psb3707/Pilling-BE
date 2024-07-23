@@ -17,6 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from accounts.views import kakao_login, user_my_detail, user_detail
+# from tags.views import access_tag
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    path('auth/kakao/login', kakao_login),
+    path('users/me', user_my_detail),
+    path('users', user_detail)
 ]
