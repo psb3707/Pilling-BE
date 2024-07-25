@@ -4,8 +4,10 @@ from accounts.models import PillingUser
 from tags.models import Tag
 
 class Medicine(models.Model):
-    item_seq = models.IntegerField()
-    tags = models.ManyToManyField(Tag,through='MedicineTag')
+    name = models.TextField()
+    efcy = models.TextField()
+    Image = models.URLField()
+    tags = models.ManyToManyField(Tag,through='MedicineTag',blank=True)
 
 class MedicineTag(models.Model):
     user = models.ForeignKey(PillingUser,on_delete=models.CASCADE)
