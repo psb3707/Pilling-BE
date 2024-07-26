@@ -5,16 +5,17 @@ from .models import Medicine,MedicineTag
 
 class MedicineTagSerializer(serializers.ModelSerializer):
     user = serializers.IntegerField(source='user.id')
-    tags = TagSerializer(source='tag_set',many=True)
+    tag = TagSerializer()
     class Meta:
         model = MedicineTag
         fields = [
-            'user','tags'
+            'id','tag'
         ]
 
 class MedicineSerializer(serializers.ModelSerializer):
+    tags = MedicineTagSerializer(source='medicinetag_set', many=True, read_only=True)
     class Meta:
         model = Medicine
         fields = [
-            'id','item_seq','tags'
+            'id','name','efcy','image', 'tags' 
         ]
