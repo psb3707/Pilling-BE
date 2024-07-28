@@ -6,7 +6,11 @@ from tags.models import Tag
 class Medicine(models.Model):
     name = models.TextField()
     efcy = models.TextField()
-    Image = models.URLField()
+    image = models.TextField()
+    usemethod=models.CharField()
+    atpn = models.CharField()
+    intrc = models.CharField()
+    seQ = models.CharField()
     tags = models.ManyToManyField(Tag,through='MedicineTag',blank=True)
 
 class MedicineTag(models.Model):

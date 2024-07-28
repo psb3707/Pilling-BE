@@ -4,9 +4,10 @@ from medicines.models import Medicine
 from medicines.serializers import MedicineSerializer
 
 from .models import Scrap
-from .serializers import ScrapSerializer
+from .serializers import ScrapSerializer,ScrapMedicineSerialzier
 from rest_framework.generics import CreateAPIView,ListAPIView,UpdateAPIView,DestroyAPIView,RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from config.permissions import IsOwner
 
 class ScrapCreateView(CreateAPIView):
@@ -14,6 +15,17 @@ class ScrapCreateView(CreateAPIView):
     serializer_class = ScrapSerializer
     permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        medicine_data = request.data.get('medicine')
+        categoty = request.data.get('category')
+        medicine_serializer = ScrapMedicineSerialzier(data=medicine_data)
+        medicine_serializer.is_valid(raise_exception=True)
+
+        medicine = medicine_serializer.save()
+
+        scrap = Scrap.objects.create(user=request.user,medicine=medicine,category=categoty)
+        serializer = ScrapSerializer(instance=scrap)
+        return Response(serializer.data)
 
 class ScrapListView(ListAPIView):
     serializer_class = ScrapSerializer
