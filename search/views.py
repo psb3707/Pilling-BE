@@ -89,10 +89,10 @@ def search_medicine(request):
                 else:
                     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
                     
-            efcy_data = get_efcy_using_openai_custom(item['efcyQesitm'],efcy)
-            # efcy_data = (respone.choices[0].message.content).strip()
-            medicine = Medicine(name=item['itemName'], efcy=efcy_data, image=itemImage)
-        
+                efcy_data = get_efcy_using_openai_custom(item['efcyQesitm'],efcy)
+                medicine = {"name":item['itemName'],"efcy":efcy_data,"image":itemImage}
+                medicines.append(medicine)
+                
             serializer = MedicineSerializer(medicines,many=True)
             return Response(serializer.data)
         
