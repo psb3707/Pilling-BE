@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.urls import path,include
 
 from accounts.views import kakao_login, user_my_detail, user_detail
+from search.views import search_medicine
 # from tags.views import access_tag
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+    path('scraps/', include('scraps.urls')),
     path('auth/kakao/login', kakao_login),
     path('users/me', user_my_detail),
-    path('users', user_detail)
+    path('users', user_detail),
+    path('search/',search_medicine),
 ]

@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
+from medicines.models import Medicine
+
+from medicines.serializers import MedicineSerializer
 
 from .models import Scrap
 from .serializers import ScrapSerializer
@@ -7,10 +10,10 @@ from rest_framework.permissions import IsAuthenticated
 from config.permissions import IsOwner
 
 class ScrapCreateView(CreateAPIView):
+    queryset = Scrap.objects.all()
     serializer_class = ScrapSerializer
     permission_classes = [IsAuthenticated]
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+
 
 class ScrapListView(ListAPIView):
     serializer_class = ScrapSerializer
