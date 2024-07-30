@@ -1,9 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Medicine
-from .serializers import MedicineSerializer,MedicineDetailSerializer
-from config.utils import get_thumbnail,get_efcy_using_openai,get_efcy_using_openai_custom
+from .serializers import MedicineSerializer, MedicineDetailSerializer
+from config.utils import get_thumbnail, get_efcy_using_openai, get_efcy_using_openai_custom
 import requests
 
 
