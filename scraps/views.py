@@ -8,6 +8,7 @@ from .serializers import ScrapSerializer,ScrapMedicineSerialzier
 from rest_framework.generics import CreateAPIView,ListAPIView,UpdateAPIView,DestroyAPIView,RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
 from config.permissions import IsOwner
 
 class ScrapCreateView(CreateAPIView):
@@ -34,7 +35,12 @@ class ScrapListView(ListAPIView):
         queryset = Scrap.objects.all().defer("user")
         category = self.request.query_params.get('category',None)
         if category is not None:
-            queryset = queryset.filter(category=category)
+            try:
+                queryset = queryset.filter(category=category)
+            except queryset is None:
+                return Response("No content",status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response("Category is None",status=status.HTTP_400_BAD_REQUEST)
         return queryset
 
 class ScrapRetreiveView(RetrieveAPIView):
