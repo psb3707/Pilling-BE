@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'schedules',
     'scraps',
     'tags',
+    'search',
 ]
 
 MIDDLEWARE = [

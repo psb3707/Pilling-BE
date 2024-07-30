@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 
 from accounts.views import kakao_login, user_my_detail, user_detail
 from schedules.views import schedule_access, schedule_single, schedule_complete
@@ -24,7 +24,7 @@ from tags.views import tags_access
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+    path('scraps/', include('scraps.urls')),
     path('auth/kakao/login', kakao_login),
     path('users/me', user_my_detail),
     path('users', user_detail),
