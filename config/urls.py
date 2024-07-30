@@ -38,5 +38,5 @@ urlpatterns = [
     
     path('tags', tags_access),
     
-    path('search/',search_medicine),
+    path('search',search_medicine),
 ]

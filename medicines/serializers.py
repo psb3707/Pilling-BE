@@ -11,8 +11,8 @@ class MedicineTagSerializer(serializers.ModelSerializer):
 
 class MedicineSerializer(serializers.ModelSerializer):
     medicine_id = serializers.IntegerField(source='id')
-    tags = MedicineTagSerializer(source='medicinetag_set', many=True, read_only=True)
+    # tags = MedicineTagSerializer(source='medicinetag_set', many=True, read_only=True)
 
     class Meta:
         model = Medicine
-        fields = ['medicine_id', 'name', 'efcy', 'image', 'tags']
+        fields = ['medicine_id', 'name', 'efcy', 'image']

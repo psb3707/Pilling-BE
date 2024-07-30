@@ -32,7 +32,15 @@ def medicine_access(request):
         if not medicine_name:
             return Response({'error': 'Medicine name is required.'}, status=status.HTTP_400_BAD_REQUEST)
         
-        medicine, created = Medicine.objects.get_or_create(name=medicine_name)
+        medicine, created = Medicine.objects.get_or_create(
+            name=medicine_name,
+            efcy=request.data.get('efcy'),
+            image=request.data.get('image'),
+            usemethod=request.data.get('usemethod'),
+            atpn=request.data.get('atpn'),
+            intrc=request.data.get('intrc'),
+            seQ=request.data.get('seQ'),
+            )
         
         if created:
             serializer = MedicineSerializer(medicine)
