@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Medicine
+from medicines.models import Medicine
 
 class MedicineSerializer(serializers.Serializer):
     name = serializers.CharField()

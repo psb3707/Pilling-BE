@@ -6,5 +6,5 @@ from medicines.models import Medicine
 class Schedule(models.Model):
     user = models.ForeignKey(PillingUser, on_delete=models.CASCADE)
     medicine = models.ForeignKey(Medicine,on_delete=models.CASCADE)
-    datetime = models.DateField()
+    date = models.DateField(auto_now_add=False)
     completed = models.BooleanField(default=False)
