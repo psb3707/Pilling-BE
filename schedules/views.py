@@ -1,3 +1,65 @@
 from django.shortcuts import render
 
+import os
+import base64
+import json
+
+import requests
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .models import PillingUser, Schedule
+from .serializers import ScheduleSerializer
+
 # Create your views here.
+
+@api_view(['POST', 'GET'])
+@permission_classes([IsAuthenticated])
+def schedule_access(request):
+    if request.method == 'GET':
+        schedules = Schedule.objects.filter(user=request.user)
+        serializer = ScheduleSerializer(schedules, many=True, context={'request': request})
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ScheduleSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def schedule_single(request, id):
+    try: 
+        schedule = Schedule.objects.get(pk=id)
+    except Schedule.DoesNotExist:
+        return Response({"detail": "스케줄을 찾을 수 없음."}, status=status.HTTP_404_NOT_FOUND)
+    if schedule.user != request.user:
+        return Response({"detail": "당신 스케줄이 아님."}, status=status.HTTP_403_FORBIDDEN)
+    
+    if request.method == 'GET':
+        serializer = ScheduleSerializer(schedule, context={'request': request})
+        return Response(serializer.data)
+    elif request.method == 'DELETE':
+        schedule.delete()
+        return Response({"detail": "스케줄 삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
+        
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def schedule_complete(request, id):
+    if request.method == 'PATCH':
+        schedule = Schedule.objects.get(pk=id)
+        
+        if schedule.user != request.user:
+            return Response({"detail": "당신 스케줄이 아님."}, status=status.HTTP_403_FORBIDDEN)
+        else:
+            schedule.completed = True
+            schedule.save()
+            
+            serializer = ScheduleSerializer(schedule, context={'request': request})
+            return Response(serializer.data)

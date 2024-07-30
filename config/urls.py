@@ -18,12 +18,22 @@ from django.contrib import admin
 from django.urls import path
 
 from accounts.views import kakao_login, user_my_detail, user_detail
-# from tags.views import access_tag
+from schedules.views import schedule_access, schedule_single, schedule_complete
+from medicines.views import medicine_access
+from tags.views import tags_access
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('auth/kakao/login', kakao_login),
     path('users/me', user_my_detail),
-    path('users', user_detail)
+    path('users', user_detail),
+    
+    path('schedules', schedule_access),
+    path('schedules/<int:id>', schedule_single),
+    path('schedules/<int:id>/complete', schedule_complete),
+    
+    path('medicines', medicine_access),
+    
+    path('tags', tags_access)
 ]
