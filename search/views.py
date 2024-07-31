@@ -33,7 +33,12 @@ def search_medicine(request):
         if type == "detail":
             if items:
                 for item in items:
-                    data = {"name":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
+                    if item['itemImage']:
+                        itemImage = get_thumbnail(item['itemImage'])
+                    else:
+                        itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
+
+                    data = {"name":item['itemName'],"efcy":item['efcyQesitm'],"image":itemImage, "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
                             "usemethod":item['useMethodQesitm'],"seQ":item['seQesitm']}
                     medicines.append(data)
 
@@ -72,7 +77,11 @@ def search_medicine(request):
         if type == "detail":
             if items:
                 for item in items:
-                    data = {"name":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm']}
+                    if item['itemImage']:
+                        itemImage = get_thumbnail(item['itemImage'])
+                    else:
+                        itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
+                    data = {"name":item['itemName'],"efcy":item['efcyQesitm'],"image":itemImage, "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm']}
                     medicines.append(data)
                 serializer = MedicineDetailSerializer(medicines,many=True)
                 return Response(serializer.data)
