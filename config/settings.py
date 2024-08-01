@@ -28,7 +28,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'api.pilling.xyz',
+    'pilling.xyz'
+]
 
 APPEND_SLASH = False
 # Application definition
@@ -156,4 +161,8 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'https://pilling.xyz',
+    'https://api.pilling.xyz'
 ]
+
+CORS_ALLOW_CREDENTIALS = True
