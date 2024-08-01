@@ -82,3 +82,9 @@ def get_efcy_using_openai_custom(efcy_data,efcy):
         n=1,
     )
     return (respone.choices[0].message.content).strip()
+
+def opening_hours(start,end):
+    if start is None or end is None:
+        return 'Closed'
+    data = start + '~' + end
+    return data

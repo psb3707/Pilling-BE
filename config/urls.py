@@ -22,6 +22,7 @@ from schedules.views import schedule_access, schedule_single, schedule_complete
 from medicines.views import medicine_access
 from tags.views import tags_access
 from search.views import search_medicine
+from pharms.views import pharm_info
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,4 +40,5 @@ urlpatterns = [
     path('tags', tags_access),
     
     path('search',search_medicine),
+    path('pharm',pharm_info),
 ]
