@@ -26,7 +26,7 @@ from pharms.views import pharm_info
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('scraps/', include('scraps.urls')),
+    path('scraps', include('scraps.urls')),
     path('auth/kakao/login', kakao_login),
     path('users/me', user_my_detail),
     path('users', user_detail),
