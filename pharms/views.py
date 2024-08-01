@@ -6,7 +6,7 @@ from .models import Pharm
 from  .serializers import PharmSerializer
 
 @api_view(['POST','GET'])
-def testing(request):
+def pharm_info(request):
 
     def haversine(lat1, lon1, lat2, lon2):
             R = 6371  # 지구 반경 (km)
