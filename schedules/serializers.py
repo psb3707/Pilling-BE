@@ -4,6 +4,8 @@ from .models import Schedule
 from tags.models import Tag
 from medicines.models import MedicineTag, Medicine
 from datetime import datetime, date
+from rest_framework.exceptions import ValidationError
+
 
 class ScheduleSerializer(serializers.ModelSerializer):    
     schedule_id = serializers.IntegerField(source='id', read_only=True)
@@ -25,16 +27,20 @@ class ScheduleSerializer(serializers.ModelSerializer):
         return TagSerializer([mt.tag for mt in medicine_tags], many=True).data
     
     def create(self, validated_data):
-        print('create 들어옴')
         tags_data = self.initial_data.get('tags', [])
-        print(tags_data)
         user = self.context['request'].user
-        print(user.nickname)
         
         medicine_name = validated_data.pop('medicine_name')
-        print(medicine_name)
         
-        medicine = Medicine.objects.get(name=medicine_name)
+        medicine = None
+        try: 
+            medicine = Medicine.objects.get(name=medicine_name)
+        except Medicine.DoesNotExist:
+            efcy = self.initial_data.get('efcy')
+            image = self.initial_data.get('image')
+            if efcy is None or image is None:
+                raise ValidationError({'details': '효능과 사진 필드에 문자열 값이 있어야 합니다.'})
+            medicine = Medicine.objects.create(name=medicine_name, efcy=efcy, image=image)
         
         schedule = Schedule.objects.create(user=user, medicine=medicine, **validated_data)
         
