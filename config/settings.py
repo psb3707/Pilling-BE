@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'scraps',
     'tags',
     'search',
+    'pharms',
 ]
 
 MIDDLEWARE = [
