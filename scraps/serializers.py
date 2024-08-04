@@ -1,7 +1,4 @@
 from rest_framework import serializers
-from medicines.models import Medicine
-from django.shortcuts import get_object_or_404
-from medicines.serializers import MedicineSerializer
 from .models import Scrap
 
 
