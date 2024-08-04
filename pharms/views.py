@@ -28,11 +28,17 @@ def pharm_info(request):
 
         pharms = Pharm.objects.all()
 
+        user_pharm = None
+
         for pharm in pharms:
             distance = haversine(lat,lon,pharm.lat,pharm.lon)
             if distance <= radius:
                 user_pharm = pharm
                 radius = distance
+
+        if user_pharm is None:
+            return Response("데이터베이스 상에 존재하지 않는 약국입니다.",status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = PharmSerializer(user_pharm)
         return Response(serializer.data)
     
