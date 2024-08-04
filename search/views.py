@@ -42,7 +42,7 @@ def search_medicine(request):
                     # else:
                     #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
 
-                data = {"name":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
+                data = {"itemName":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
                         "usemethod":item['useMethodQesitm'],"seQ":item['seQesitm']}
                 medicines.append(data)
 
@@ -59,7 +59,7 @@ def search_medicine(request):
                 #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
 
             efcy_data = get_efcy_using_openai(item['efcyQesitm'])
-            medicine = {"name":item['itemName'],"efcy":efcy_data,"image":item['itemImage']}
+            medicine = {"itemName":item['itemName'],"efcy":efcy_data,"image":item['itemImage']}
             medicines.append(medicine)
         
         serializer = MedicineSerializer(medicines,many=True)
@@ -87,7 +87,7 @@ def search_medicine(request):
                     #     itemImage = get_thumbnail(item['itemImage'])
                     # else:
                     #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
-                data = {"name":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
+                data = {"itemName":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
                         "usemethod":item['useMethodQesitm'],"seQ":item['seQesitm']}
                 medicines.append(data)
             serializer = MedicineDetailSerializer(medicines,many=True)
@@ -103,7 +103,7 @@ def search_medicine(request):
                 #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
                     
             efcy_data = get_efcy_using_openai_custom(item['efcyQesitm'],efcy)
-            medicine = {"name":item['itemName'],"efcy":efcy_data,"image":item['itemImage']}
+            medicine = {"itemName":item['itemName'],"efcy":efcy_data,"image":item['itemImage']}
             medicines.append(medicine)
                 
         serializer = MedicineSerializer(medicines,many=True)
