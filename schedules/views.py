@@ -38,7 +38,7 @@ def schedule_single(request, id):
         return Response(serializer.data)
     elif request.method == 'DELETE':
         schedule.delete()
-        return Response({"detail": "스케줄 삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"detail": "스케줄 삭제 완료"}, status=status.HTTP_200_OK)
         
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
