@@ -27,7 +27,7 @@ def schedule_access(request):
 @permission_classes([IsAuthenticated])
 def schedule_single(request, id):
     try: 
-        schedule = Schedule.objects.get(pk=id)
+        schedule = Schedule.objects.get(id=id)
     except Schedule.DoesNotExist:
         return Response({"detail": "스케줄을 찾을 수 없음."}, status=status.HTTP_404_NOT_FOUND)
     if schedule.user != request.user:
