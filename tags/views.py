@@ -45,4 +45,4 @@ def tags_access(request):
         medicine = Medicine.objects.get(name=request.query_params.get('medicine-name'))
         tag = Tag.objects.get(content=request.query_params.get('content'))
         MedicineTag.objects.get(medicine=medicine, tag=tag, user=request.user).delete()
-        return Response({"detail": "태그를 삭제했습니다."}, status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
