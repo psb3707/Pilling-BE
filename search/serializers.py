@@ -14,3 +14,6 @@ class MedicineDetailSerializer(serializers.Serializer):
     atpn = serializers.CharField()
     intrc = serializers.CharField()
     seQ = serializers.CharField()
+
+class MedicineNameSerializer(serializers.Serializer):
+    name = serializers.CharField()
