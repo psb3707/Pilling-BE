@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from tags.serializers import TagSerializer
-from .models import Schedule
+from .models import Schedule, ScheduleTag
 from tags.models import Tag
-from medicines.models import MedicineTag, Medicine
+from medicines.models import Medicine
 
 class ScheduleSerializer(serializers.ModelSerializer):    
     schedule_id = serializers.IntegerField(source='id', read_only=True)
@@ -17,9 +17,8 @@ class ScheduleSerializer(serializers.ModelSerializer):
         fields = ['schedule_id', 'pilling_user_id', 'medicine_name', 'date', 'tags', 'completed']
 
     def get_tags(self, obj):
-        user = self.context['request'].user
-        medicine_tags = MedicineTag.objects.filter(medicine=obj.medicine, user=user)
-        return TagSerializer([mt.tag for mt in medicine_tags], many=True).data
+        schedule_tags = ScheduleTag.objects.filter(schedule=obj)
+        return TagSerializer([mt.tag for mt in schedule_tags], many=True).data
     
     def create(self, validated_data):
         tags_data = self.initial_data.get('tags', [])
@@ -37,6 +36,6 @@ class ScheduleSerializer(serializers.ModelSerializer):
         
         for tag_data in tags_data:
             tag, created = Tag.objects.get_or_create(content=tag_data['content'])
-            MedicineTag.objects.get_or_create(user=user, medicine=medicine, tag=tag)
+            ScheduleTag.objects.create(schedule=schedule, tag=tag)
         
         return schedule
