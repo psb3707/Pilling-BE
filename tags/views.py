@@ -36,7 +36,7 @@ def tags_access(request):
             return Response({"detail": "약 이름이 필요합니다."}, status=400)
         medicine = Medicine.objects.get(name=medicine_name)
         medicine_tags = MedicineTag.objects.filter(user=request.user, medicine=medicine)
-        tags = set([medicine_tag.tag for medicine_tag in medicine_tags] + list(Tag.objects.filter(id__in=range(1, 11))))
+        tags = set([medicine_tag.tag for medicine_tag in medicine_tags] + list(Tag.objects.filter(id__in=range(1, 18))))
         
         serializer = TagSerializer(tags, many=True)
         return Response(serializer.data)
