@@ -3,9 +3,6 @@ from tags.serializers import TagSerializer
 from .models import Schedule
 from tags.models import Tag
 from medicines.models import MedicineTag, Medicine
-from datetime import datetime, date
-from rest_framework.exceptions import ValidationError
-
 
 class ScheduleSerializer(serializers.ModelSerializer):    
     schedule_id = serializers.IntegerField(source='id', read_only=True)
