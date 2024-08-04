@@ -4,10 +4,11 @@ from rest_framework import status
 from .serializers import MedicineSerializer, MedicineDetailSerializer,MedicineNameSerializer
 from config.utils import get_efcy_using_openai, get_efcy_using_openai_custom
 import requests
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search_medicine(request):
     itemName = request.GET.get("itemName",None)
     efcy = request.GET.get("efcyQesitm",None)
@@ -28,20 +29,12 @@ def search_medicine(request):
         
         items = data['body']['items']
         
-        # filtered_items = [item for item in items if item['itemName'].startswith(itemName)]
-        # sorted_items = sorted(filtered_items, key=lambda x: x['itemName'])
-
         medicines = []
 
 
         if type == "detail":
             
             for item in items:
-                    # if item['itemImage']:
-                    #     itemImage = get_thumbnail(item['itemImage'])
-                    # else:
-                    #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
-
                 data = {"itemName":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
                         "usemethod":item['useMethodQesitm'],"seQ":item['seQesitm']}
                 medicines.append(data)
@@ -52,12 +45,6 @@ def search_medicine(request):
             
         
         for item in items:
-                # if item['itemImage']:
-                #     itemImage = get_thumbnail(item['itemImage'])
-                    
-                # else:
-                #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
-
             efcy_data = get_efcy_using_openai(item['efcyQesitm'])
             medicine = {"itemName":item['itemName'],"efcy":efcy_data,"image":item['itemImage']}
             medicines.append(medicine)
@@ -68,7 +55,6 @@ def search_medicine(request):
         
         
     elif efcy is not None:
-
         params = {"efcyQesitm":efcy, "type":"json","numOfRows":10}
         response = requests.get(url, params=params)
         data = response.json()
@@ -83,10 +69,6 @@ def search_medicine(request):
         if type == "detail":
             
             for item in items:
-                    # if item['itemImage']:
-                    #     itemImage = get_thumbnail(item['itemImage'])
-                    # else:
-                    #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
                 data = {"itemName":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
                         "usemethod":item['useMethodQesitm'],"seQ":item['seQesitm']}
                 medicines.append(data)
@@ -96,12 +78,6 @@ def search_medicine(request):
            
         
         for item in items:
-                # if item['itemImage']:
-                #     itemImage = get_thumbnail(item['itemImage'])
-                    
-                # else:
-                #     itemImage = "사진은 공개되지 않았습니다. 죄송합니다."
-                    
             efcy_data = get_efcy_using_openai_custom(item['efcyQesitm'],efcy)
             medicine = {"itemName":item['itemName'],"efcy":efcy_data,"image":item['itemImage']}
             medicines.append(medicine)
@@ -111,7 +87,7 @@ def search_medicine(request):
         
         
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def search_for_register(request):
     query = request.GET.get('itemName',None)
     if query is None:
@@ -135,7 +111,3 @@ def search_for_register(request):
     serializer = MedicineNameSerializer(medicines,many=True)
 
     return Response(serializer.data)
-    
-
-
-
