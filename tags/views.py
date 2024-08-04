@@ -24,7 +24,7 @@ from .serializers import TagRequestSerializer, TagSerializer
 @permission_classes([AllowAny])
 def tags_access(request):
     if request.method == 'POST':
-        newTag = Tag.objects.get_or_create(content=request.data.get('content'))
+        newTag, created = Tag.objects.get_or_create(content=request.data.get('content'))
         medicine = Medicine.objects.get(name=request.data.get('medicine_name'))
         MedicineTag.objects.create(user=request.user, medicine=medicine, tag=newTag)
         serializer = TagSerializer(newTag)
@@ -44,5 +44,5 @@ def tags_access(request):
     elif request.method == 'DELETE':
         medicine = Medicine.objects.get(name=request.query_params.get('medicine-name'))
         tag = Tag.objects.get(content=request.query_params.get('content'))
-        MedicineTag.objects.get(medicine=medicine, tag=tag).delete()
+        MedicineTag.objects.get(medicine=medicine, tag=tag, user=request.user).delete()
         return Response({"detail": "태그를 삭제했습니다."}, status=status.HTTP_204_NO_CONTENT)
