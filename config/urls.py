@@ -21,7 +21,7 @@ from accounts.views import kakao_login, user_my_detail, user_detail
 from schedules.views import schedule_access, schedule_single, schedule_complete
 from medicines.views import medicine_access
 from tags.views import tags_access
-from search.views import search_medicine
+from search.views import search_medicine,search_for_register
 from pharms.views import pharm_info
 
 urlpatterns = [
@@ -40,5 +40,6 @@ urlpatterns = [
     path('tags', tags_access),
     
     path('search',search_medicine),
+    path('register',search_for_register),
     path('pharm',pharm_info),
 ]
