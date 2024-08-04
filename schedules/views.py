@@ -44,7 +44,7 @@ def schedule_single(request, id):
 @permission_classes([IsAuthenticated])
 def schedule_complete(request, id):
     if request.method == 'PATCH':
-        schedule = Schedule.objects.get(pk=id)
+        schedule = Schedule.objects.get(id=id)
         
         if schedule.user != request.user:
             return Response({"detail": "당신 스케줄이 아님."}, status=status.HTTP_403_FORBIDDEN)
