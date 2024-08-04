@@ -1,15 +1,5 @@
-from django.shortcuts import render
-
-from django.shortcuts import render
-
-import os
-import base64
-import json
-
-import requests
-
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -17,11 +7,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Tag
 from medicines.models import MedicineTag, Medicine
-from .serializers import TagRequestSerializer, TagSerializer
+from .serializers import TagSerializer
 
 
 @api_view(['POST', 'GET', 'DELETE'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def tags_access(request):
     if request.method == 'POST':
         newTag, created = Tag.objects.get_or_create(content=request.data.get('content'))
