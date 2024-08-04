@@ -59,7 +59,10 @@ def schedule_complete(request, id):
         if schedule.user != request.user:
             return Response({"detail": "당신 스케줄이 아님."}, status=status.HTTP_403_FORBIDDEN)
         else:
-            schedule.completed = True
+            if schedule.completed == False:
+                schedule.completed = True
+            else:
+                schedule.completed = False
             schedule.save()
             
             serializer = ScheduleSerializer(schedule, context={'request': request})
