@@ -38,7 +38,7 @@ def tags_access(request):
         medicine_tags = MedicineTag.objects.filter(user=request.user, medicine=medicine)
         tags = set([medicine_tag.tag for medicine_tag in medicine_tags] + list(Tag.objects.filter(id__in=range(1, 18))))
         
-        serializer = TagSerializer(tags, many=True)
+        serializer = TagSerializer(sorted(tags, key=lambda x: x.id), many=True)
         return Response(serializer.data)
     
     elif request.method == 'DELETE':
