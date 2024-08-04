@@ -6,4 +6,4 @@ class ScrapSerializer(serializers.ModelSerializer):
     medicine_name = serializers.CharField(source='medicine.name')
     class Meta:
         model = Scrap
-        fields = ['user','medicine_name','category']
+        fields = ['id','user','medicine_name','category']
