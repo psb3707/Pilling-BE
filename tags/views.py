@@ -24,19 +24,23 @@ from .serializers import TagRequestSerializer, TagSerializer
 @permission_classes([AllowAny])
 def tags_access(request):
     if request.method == 'POST':
-        newTag = Tag.objects.create(content=request.data.get('content'))
+        newTag = Tag.objects.get_or_create(content=request.data.get('content'))
+        medicine = Medicine.objects.get(name=request.data.get('medicine_name'))
+        MedicineTag.objects.create(user=request.user, medicine=medicine, tag=newTag)
         serializer = TagSerializer(newTag)
         return Response(serializer.data)
+    
     elif request.method == 'GET':
         medicine_name = request.query_params.get('medicine-name')
         if not medicine_name:
-            return Response({"error": "Medicine name is required."}, status=400)
-        id = Medicine.objects.get(name=medicine_name)
-        medicine_tags = MedicineTag.objects.filter(user=request.user, medicine=id)
+            return Response({"detail": "약 이름이 필요합니다."}, status=400)
+        medicine = Medicine.objects.get(name=medicine_name)
+        medicine_tags = MedicineTag.objects.filter(user=request.user, medicine=medicine)
         tags = set([medicine_tag.tag for medicine_tag in medicine_tags] + list(Tag.objects.filter(id__in=range(1, 11))))
         
         serializer = TagSerializer(tags, many=True)
         return Response(serializer.data)
+    
     elif request.method == 'DELETE':
         medicine = Medicine.objects.get(name=request.query_params.get('medicine-name'))
         tag = Tag.objects.get(content=request.query_params.get('content'))
