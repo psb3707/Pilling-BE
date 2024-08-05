@@ -18,11 +18,11 @@ def tags_access(request):
         
         if UserTag.objects.filter(user=request.user, tag=newTag).exists():
             return Response({"detail": "중복된 커스텀태그는 불가능합니다."}, status=status.HTTP_409_CONFLICT)
+        else:
+            UserTag.objects.create(user=request.user, tag=newTag)
         
-        UserTag.objects.create(user=request.user, tag=newTag)
-        
-        serializer = TagSerializer(newTag)
-        return Response(serializer.data)
+            serializer = TagSerializer(newTag)
+            return Response(serializer.data)
     
     elif request.method == 'GET':
         customTags = []
@@ -38,7 +38,7 @@ def tags_access(request):
         tag = Tag.objects.get(content=request.query_params.get('content'))
         
         try:
-            UserTag.objects.get(tag=tag, user=request.user).delete()
+            UserTag.objects.filter(tag=tag, user=request.user).delete()
             return Response({"detail": "삭제 완료."}, status=status.HTTP_200_OK)
         except UserTag.DoesNotExist:
             return Response({"detail": "없는 태그임."}, status=status.HTTP_200_OK)
