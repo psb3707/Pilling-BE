@@ -17,7 +17,8 @@ def tags_access(request):
         newTag, created = Tag.objects.get_or_create(content=request.data.get('content'))
         
         if UserTag.objects.filter(user=request.user, tag=newTag).exists():
-            return Response({"detail": "중복된 커스텀태그는 불가능합니다."}, status=status.HTTP_409_CONFLICT)
+            serializer = TagSerializer(newTag)
+            return Response(serializer.data)
         else:
             UserTag.objects.create(user=request.user, tag=newTag)
         
