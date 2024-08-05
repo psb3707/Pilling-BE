@@ -7,7 +7,7 @@ class PillingUserResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PillingUser
-        fields = ['pilling_user_id', 'nickname', 'kakao_sub']
+        fields = ['pilling_user_id', 'nickname', 'kakao_sub', 'picture']
         extra_kwargs = {
             field: {'read_only': True} for field in fields
         }
