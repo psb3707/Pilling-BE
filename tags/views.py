@@ -15,8 +15,9 @@ from .serializers import TagSerializer
 def tags_access(request):
     if request.method == 'POST':
         newTag, created = Tag.objects.get_or_create(content=request.data.get('content'))
-        # medicine = Medicine.objects.get(name=request.data.get('medicine_name'))
-        # MedicineTag.objects.create(user=request.user, medicine=medicine, tag=newTag)
+        
+        if UserTag.objects.exists(user=request.user, tag=newTag):
+            return Response({"detail": "중복된 커스텀태그는 불가능합니다."}, status=status.HTTP_409_CONFLICT)
         
         UserTag.objects.create(user=request.user, tag=newTag)
         
@@ -24,12 +25,6 @@ def tags_access(request):
         return Response(serializer.data)
     
     elif request.method == 'GET':
-        # medicine_name = request.query_params.get('medicine-name')
-        # if not medicine_name:
-        #     return Response({"detail": "약 이름이 필요합니다."}, status=400)
-        # medicine = Medicine.objects.get(name=medicine_name)
-        # medicine_tags = MedicineTag.objects.filter(user=request.user, medicine=medicine)
-        
         customTags = []
         for ut in UserTag.objects.filter(user=request.user):
             customTags.append(ut.tag)
@@ -40,7 +35,6 @@ def tags_access(request):
         return Response(serializer.data)
     
     elif request.method == 'DELETE':
-        # medicine = Medicine.objects.get(name=request.query_params.get('medicine-name'))
         tag = Tag.objects.get(content=request.query_params.get('content'))
         
         try:
