@@ -16,7 +16,7 @@ def tags_access(request):
     if request.method == 'POST':
         newTag, created = Tag.objects.get_or_create(content=request.data.get('content'))
         
-        if UserTag.objects.exists(user=request.user, tag=newTag):
+        if UserTag.objects.filter(user=request.user, tag=newTag).exists():
             return Response({"detail": "중복된 커스텀태그는 불가능합니다."}, status=status.HTTP_409_CONFLICT)
         
         UserTag.objects.create(user=request.user, tag=newTag)
