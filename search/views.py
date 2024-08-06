@@ -20,7 +20,7 @@ def search_medicine(request):
     
     if itemName is not None:
         if('%' in itemName):
-            itemName = itemName.spilt('%',1)[0]
+            itemName = itemName.split('%',1)[0]
 
         params = {"itemName":itemName,"type":"json","numOfRows":10}
         response = requests.get(url, params=params)
