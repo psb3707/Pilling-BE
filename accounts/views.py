@@ -44,6 +44,20 @@ def verify_kakao_oidc(kakao_data):
         raise KakaoDataException()
     # todo: implement OIDC verify code here...
 
+def extract_kakao_picture(kakao_data):
+    access_token = kakao_data.get('access_token', None)
+    if access_token is None:
+        raise KakaoDataException()
+    else:
+        response = requests.get(
+            'https://kapi.kakao.com/v1/api/talk/profile',
+            headers={
+                'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'Authorization': 'Bearer ' + access_token
+            }
+        )
+        return response.json().get('profileImageURL', '')
+
 def extract_kakao_nickname(kakao_data):
     id_token = kakao_data.get('id_token', None)
     if id_token is None:
@@ -78,6 +92,8 @@ def kakao_login(request):
     try:
         kakao_data = exchange_kakao_access_token(data['access_code'])
         verify_kakao_oidc(kakao_data)
+        picture = extract_kakao_picture(kakao_data)
+        print(picture)
         nickname = extract_kakao_nickname(kakao_data)
         sub = extract_kakao_sub(kakao_data)
     except KakaoAccessTokenException:
@@ -89,14 +105,19 @@ def kakao_login(request):
 
     try:
         user = PillingUser.objects.get(kakao_sub=sub)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh)
+        })
     except PillingUser.DoesNotExist:
-        user = PillingUser.objects.create_user(nickname=nickname, kakao_sub=sub)
-
-    refresh = RefreshToken.for_user(user)
-    return Response({
-        'access_token': str(refresh.access_token),
-        'refresh_token': str(refresh)
-    })
+        user = PillingUser.objects.create_user(nickname=nickname, kakao_sub=sub, picture=picture)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh),
+            'new': True
+        })
     
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])

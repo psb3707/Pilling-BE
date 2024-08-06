@@ -15,15 +15,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 
 from accounts.views import kakao_login, user_my_detail, user_detail
-# from tags.views import access_tag
+from schedules.views import schedule_access, schedule_single, schedule_complete
+from medicines.views import medicine_access
+from tags.views import tags_access
+from search.views import search_medicine,search_for_register
+from pharms.views import pharm_info
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+    path('scraps', include('scraps.urls')),
     path('auth/kakao/login', kakao_login),
     path('users/me', user_my_detail),
-    path('users', user_detail)
+    path('users', user_detail),
+    
+    path('schedules', schedule_access),
+    path('schedules/<int:id>', schedule_single),
+    path('schedules/<int:id>/complete', schedule_complete),
+    
+    path('medicines', medicine_access),
+    
+    path('tags', tags_access),
+    
+    path('search',search_medicine),
+    path('register',search_for_register),
+    path('pharm',pharm_info),
 ]
