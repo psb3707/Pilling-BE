@@ -37,7 +37,7 @@ class ScrapListView(ListAPIView):
     serializer_class = ScrapSerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        queryset = Scrap.objects.filter(self.request.user).defer("user")
+        queryset = Scrap.objects.filter(user=self.request.user).defer("user")
         category = self.request.query_params.get('category',None)
         if category is not None:
             try:
