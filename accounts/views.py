@@ -105,14 +105,19 @@ def kakao_login(request):
 
     try:
         user = PillingUser.objects.get(kakao_sub=sub)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh)
+        })
     except PillingUser.DoesNotExist:
         user = PillingUser.objects.create_user(nickname=nickname, kakao_sub=sub, picture=picture)
-
-    refresh = RefreshToken.for_user(user)
-    return Response({
-        'access_token': str(refresh.access_token),
-        'refresh_token': str(refresh)
-    })
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh),
+            'new': True
+        })
     
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
