@@ -19,7 +19,9 @@ def search_medicine(request):
         return Response("약 이름과 증상 정보 중 하나는 제공해야 합니다.",status=status.HTTP_400_BAD_REQUEST)
     
     if itemName is not None:
-        
+        if('%' in itemName):
+            itemName = itemName.spilt('%',1)[0]
+
         params = {"itemName":itemName,"type":"json","numOfRows":10}
         response = requests.get(url, params=params)
         data = response.json()
@@ -33,7 +35,8 @@ def search_medicine(request):
 
 
         if type == "detail":
-            
+            items = list()
+            items.append(dict(data['body']['items'][0]))
             for item in items:
                 data = {"itemName":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
                         "usemethod":item['useMethodQesitm'],"seQ":item['seQesitm']}
