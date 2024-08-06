@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from config.permissions import IsOwner
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
 
 class ScrapCreateView(CreateAPIView):
@@ -16,6 +17,8 @@ class ScrapCreateView(CreateAPIView):
 
     def post(self, request):
         medicine_name = request.data.get('medicine_name')
+        if medicine_name is None:
+            raise ValidationError({'details': '아직 없는 약입니다.'})
         category = request.data.get('category')
         
         medicine = None
@@ -32,9 +35,9 @@ class ScrapCreateView(CreateAPIView):
 
 class ScrapListView(ListAPIView):
     serializer_class = ScrapSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        queryset = Scrap.objects.all().defer("user")
+        queryset = Scrap.objects.filter(self.request.user).defer("user")
         category = self.request.query_params.get('category',None)
         if category is not None:
             try:
@@ -46,15 +49,18 @@ class ScrapListView(ListAPIView):
         return queryset
 
 class ScrapRetreiveView(RetrieveAPIView):
-    queryset = Scrap.objects.all().defer("user")
     serializer_class = ScrapSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return Scrap.objects.filter(user=self.request.user).defer("user")
 
 class ScrapUpdateView(UpdateAPIView):
-    queryset = Scrap.objects.all().defer("user")
     serializer_class = ScrapSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return Scrap.objects.filter(user=self.request.user).defer("user")
 
 class ScrapDestroyView(DestroyAPIView):
-    queryset = Scrap.objects.all()
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return Scrap.objects.filter(user=self.request.user).defer("user")
