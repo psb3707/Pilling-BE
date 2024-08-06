@@ -49,8 +49,6 @@ def search_medicine(request):
                     }
                 if data.get("efcy", None) is None:
                     data["efcy"] = "내용없음"
-                if data.get("image", None) is None:
-                    data["image"] = "내용없음"
                 if data.get("atpn", None) is None:
                     data["atpn"] = "내용없음"
                 if data.get("intrc", None) is None:
