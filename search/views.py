@@ -48,15 +48,15 @@ def search_medicine(request):
                     "seQ":item['seQesitm']
                     }
                 if data.get("efcy", None) is None:
-                    data["efcy"] = "내용없음"
+                    data["efcy"] = "이 정보가 제공되지 않는 약입니다. :("
                 if data.get("atpn", None) is None:
-                    data["atpn"] = "내용없음"
+                    data["atpn"] = "이 정보가 제공되지 않는 약입니다. :("
                 if data.get("intrc", None) is None:
-                    data["intrc"] = "내용없음"
+                    data["intrc"] = "이 정보가 제공되지 않는 약입니다. :("
                 if data.get("usemethod", None) is None:
-                    data["usemethod"] = "내용없음"
+                    data["usemethod"] = "이 정보가 제공되지 않는 약입니다. :("
                 if data.get("seQ", None) is None:
-                    data["seQ"] = "내용없음"
+                    data["seQ"] = "이 정보가 제공되지 않는 약입니다. :("
                 medicines.append(data)
 
             serializer = MedicineDetailSerializer(medicines,many=True)
