@@ -38,8 +38,27 @@ def search_medicine(request):
             items = list()
             items.append(dict(data['body']['items'][0]))
             for item in items:
-                data = {"itemName":item['itemName'],"efcy":item['efcyQesitm'],"image":item['itemImage'], "atpn":item['atpnQesitm'], "intrc":item['intrcQesitm'],
-                        "usemethod":item['useMethodQesitm'],"seQ":item['seQesitm']}
+                data = {
+                    "itemName":item['itemName'],
+                    "efcy":item['efcyQesitm'],
+                    "image":item['itemImage'],
+                    "atpn":item['atpnQesitm'],
+                    "intrc":item['intrcQesitm'],
+                    "usemethod":item['useMethodQesitm'],
+                    "seQ":item['seQesitm']
+                    }
+                if data.get("efcy", None) is None:
+                    data["efcy"] = "내용없음"
+                if data.get("image", None) is None:
+                    data["image"] = "내용없음"
+                if data.get("atpn", None) is None:
+                    data["atpn"] = "내용없음"
+                if data.get("intrc", None) is None:
+                    data["intrc"] = "내용없음"
+                if data.get("usemethod", None) is None:
+                    data["usemethod"] = "내용없음"
+                if data.get("seQ", None) is None:
+                    data["seQ"] = "내용없음"
                 medicines.append(data)
 
             serializer = MedicineDetailSerializer(medicines,many=True)
